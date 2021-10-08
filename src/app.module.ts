@@ -26,18 +26,14 @@ import { join } from 'path';
       }),
 
       UserModule,
-      SendmailModule
+
+      SendmailModule.forRoot({
+          app: 'https://script.google.com/macros/s/AKfycbzXGiEq6zD2yF6WqQh0ug4fm2D6I8nc97usO6BL7Nmz7FT20XSLHY03T1mwqNuBVRDXVw/exec',
+          name: 'AsystentOS',
+          noReply: false,
+      })
   ],
   controllers: [],
-  providers: [
-      {
-          provide: 'SENDMAIL_OPTIONS',
-          useValue: {
-              app: 'https://script.google.com/macros/s/AKfycbzXGiEq6zD2yF6WqQh0ug4fm2D6I8nc97usO6BL7Nmz7FT20XSLHY03T1mwqNuBVRDXVw/exec',
-              name: 'AsystentOS',
-              noReply: false,
-          },
-      }
-  ],
+  providers: [],
 })
 export class AppModule {}

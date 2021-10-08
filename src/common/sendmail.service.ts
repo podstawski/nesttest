@@ -1,13 +1,14 @@
 import { Injectable, Inject } from '@nestjs/common';
 import {extend} from 'lodash';
 import {HttpService} from '@nestjs/axios';
+import {SENDMAIL_CONFIG_TOKEN, SendmailModuleOptions} from './sendmail.module'
 
 
 @Injectable()
 export class SendmailService {
     constructor (
         private httpService: HttpService,
-        @Inject('SENDMAIL_OPTIONS') private sendmailOptions
+        @Inject(SENDMAIL_CONFIG_TOKEN) private sendmailOptions: SendmailModuleOptions
     ) {}
 
     private data2qs(obj,dest,prefix) {

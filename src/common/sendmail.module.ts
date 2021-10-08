@@ -1,6 +1,15 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { SendmailService } from "./sendmail.service";
 import { HttpModule } from '@nestjs/axios';
+
+export type SendmailModuleOptions = {
+    app?: string;
+    name?: string;
+    noReply?: boolean;
+};
+
+export const SENDMAIL_CONFIG_TOKEN = 'SENDMAIL_CONFIG_TOKEN';
+
 
 @Module({
     imports: [
@@ -9,4 +18,17 @@ import { HttpModule } from '@nestjs/axios';
     controllers: [],
     providers: [SendmailService],
 })
-export class SendmailModule {}
+export class SendmailModule {
+    static forRoot(options: SendmailModuleOptions): DynamicModule {
+        return {
+            module: SendmailModule,
+            providers: [
+                {
+                    provide: SENDMAIL_CONFIG_TOKEN,
+                    useValue: options,
+                },
+            ],
+        };
+    }
+
+}
