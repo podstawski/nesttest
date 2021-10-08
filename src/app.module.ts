@@ -1,11 +1,8 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './user/user.controller';
 import { UserModule } from './user/user.module';
 import { SendmailModule} from "./common/sendmail.module";
-import { SendmailService} from "./common/sendmail.service";
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { CloudDatastoreModule } from "./common/cloud-datastore.module";
-import { HttpModule } from '@nestjs/axios';
 import { join } from 'path';
 
 @Module({
@@ -18,11 +15,6 @@ import { join } from 'path';
           keyFile: join(__dirname, '..', 'config','asystentos-f3c8a2d93711.json'),
           projectId: 'asystentos',
           namespace: process.env.NODE_ENV || 'stage'
-      }),
-
-      HttpModule.register({
-          timeout: 60000,
-          maxRedirects: 5,
       }),
 
       UserModule,

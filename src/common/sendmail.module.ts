@@ -1,6 +1,7 @@
 import { DynamicModule, Module } from '@nestjs/common';
-import { SendmailService } from "./sendmail.service";
+import { SendmailService, SENDMAIL_CONFIG_TOKEN } from "./sendmail.service";
 import { HttpModule } from '@nestjs/axios';
+
 
 export type SendmailModuleOptions = {
     app?: string;
@@ -8,12 +9,13 @@ export type SendmailModuleOptions = {
     noReply?: boolean;
 };
 
-export const SENDMAIL_CONFIG_TOKEN = 'SENDMAIL_CONFIG_TOKEN';
-
-
 @Module({
     imports: [
-        HttpModule
+        HttpModule.register({
+            timeout: 60000,
+            maxRedirects: 5,
+        }),
+        SendmailService
     ],
     controllers: [],
     providers: [SendmailService],

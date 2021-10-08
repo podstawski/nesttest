@@ -1,8 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
 import {extend} from 'lodash';
 import {HttpService} from '@nestjs/axios';
-import {SENDMAIL_CONFIG_TOKEN, SendmailModuleOptions} from './sendmail.module'
+import {SendmailModuleOptions} from "./sendmail.module";
 
+export const SENDMAIL_CONFIG_TOKEN = 'SENDMAIL_CONFIG_TOKEN';
 
 @Injectable()
 export class SendmailService {
@@ -38,9 +39,7 @@ export class SendmailService {
         const queryString=[];
         const formData = extend({},this.clone(data),{to, doc});
         delete formData.app;
-
         this.data2qs(formData,queryString,undefined);
-
         return this.httpService.post(this.sendmailOptions.app,queryString.join('&')).toPromise();
     }
 }
