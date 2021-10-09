@@ -12,8 +12,9 @@ export class UserService {
         @Inject('USER_MODEL') private UserModel: Model<UserModel>
         ) {
             const newUser = new UserModel();
+
             const result = newUser.find().then((res)=>{
-                console.log(res);
+                console.log('afterFind',res);
             });
         }
 

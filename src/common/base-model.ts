@@ -7,10 +7,10 @@ export class BaseModel {
     static _name: string;
 
     public find() {
-        return this.getDataStore().find(this.getModelName(), null)
+        return this.getDataStore().find(this.getModelName(), null);
     }
 
-    private getModelName() {
+    public getModelName() {
         return (<Model<BaseModel>>this.constructor)._name;
     }
 

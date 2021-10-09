@@ -21,6 +21,7 @@ export class CloudDatastoreService {
     private readonly datastore: Datastore;
 
     constructor(@Optional() @Inject(DATASTORE_CONFIG_TOKEN) datastoreConfig: DatastoreModuleOptions) {
+        console.log('datastoreConfig@constructor',datastoreConfig||'O KURWA, NIE MA CONFIG-a');
         this.datastore = new Datastore(datastoreConfig);
     }
 
