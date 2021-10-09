@@ -27,5 +27,6 @@ import { join } from 'path';
   ],
   controllers: [],
   providers: [],
+  exports:[SendmailModule]
 })
 export class AppModule {}

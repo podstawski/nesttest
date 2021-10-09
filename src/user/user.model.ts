@@ -1,7 +1,11 @@
-import {Model} from "../common/model";
-
+import { BaseModel } from "src/common/base-model";
+import { Model } from "../common/model";
 
 @Model('User')
-export class UserModel {
+export class UserModel extends BaseModel {
 
+    constructor(){
+        super();
+    }
+  
 }

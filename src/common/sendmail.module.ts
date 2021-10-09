@@ -9,28 +9,36 @@ export type SendmailModuleOptions = {
     noReply?: boolean;
 };
 
-@Module({
-    imports: [
-        HttpModule.register({
-            timeout: 60000,
-            maxRedirects: 5,
-        }),
-        SendmailService
-    ],
-    controllers: [],
-    providers: [SendmailService],
-})
+@Module({})
 export class SendmailModule {
     static forRoot(options: SendmailModuleOptions): DynamicModule {
+        const providers = [
+            {
+                provide: SENDMAIL_CONFIG_TOKEN,
+                useValue: options,
+            },
+        ];
         return {
+            global:true,
             module: SendmailModule,
-            providers: [
-                {
-                    provide: SENDMAIL_CONFIG_TOKEN,
-                    useValue: options,
-                },
-            ],
+            providers: providers,
+            exports: providers
         };
     }
+    static forFeature(): DynamicModule {
+        const providers = [
+            SendmailService
+        ];
+        return {
+            imports: [HttpModule.register({
+                timeout: 60000,
+                maxRedirects: 5,
+            })],
+            module: SendmailModule,
+            providers: providers,
+            exports: providers
+        };
+    }
+
 
 }
