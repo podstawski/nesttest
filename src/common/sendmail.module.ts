@@ -9,7 +9,14 @@ export type SendmailModuleOptions = {
     noReply?: boolean;
 };
 
-@Module({})
+@Module({
+    imports: [HttpModule.register({
+        timeout: 60000,
+        maxRedirects: 5,
+    })],
+    providers: [SendmailService],
+    exports: [SendmailService]
+})
 export class SendmailModule {
     static forRoot(options: SendmailModuleOptions): DynamicModule {
         const providers = [
@@ -20,20 +27,6 @@ export class SendmailModule {
         ];
         return {
             global:true,
-            module: SendmailModule,
-            providers: providers,
-            exports: providers
-        };
-    }
-    static forFeature(): DynamicModule {
-        const providers = [
-            SendmailService
-        ];
-        return {
-            imports: [HttpModule.register({
-                timeout: 60000,
-                maxRedirects: 5,
-            })],
             module: SendmailModule,
             providers: providers,
             exports: providers

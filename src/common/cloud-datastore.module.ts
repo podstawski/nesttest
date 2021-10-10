@@ -20,8 +20,8 @@ export interface DatastoreModuleAsyncOptions extends Pick<ModuleMetadata, 'impor
 }
 
 @Module({
-    providers: [CloudDatastoreService],
-    exports: [CloudDatastoreService],
+            providers: [CloudDatastoreService],
+            exports: [CloudDatastoreService],
 })
 export class CloudDatastoreModule {
     /**
@@ -51,12 +51,19 @@ export class CloudDatastoreModule {
     static forRoot(options: DatastoreModuleOptions): DynamicModule {
         return {
             module: CloudDatastoreModule,
+            global:true,
             providers: [
                 {
                     provide: DATASTORE_CONFIG_TOKEN,
                     useValue: options,
                 },
             ],
+            exports:[
+                {
+                    provide: DATASTORE_CONFIG_TOKEN,
+                    useValue: options,
+                },
+            ]
         };
     }
 

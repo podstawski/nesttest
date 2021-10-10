@@ -9,7 +9,7 @@ import { UserModel } from './user.model';
 @Module({
   imports: [
     CloudDatastoreModule,
-    SendmailModule.forFeature()
+    SendmailModule
   ],
   controllers: [UserController],
   providers: [UserService, {
