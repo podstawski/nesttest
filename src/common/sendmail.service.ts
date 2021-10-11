@@ -40,7 +40,12 @@ export class SendmailService {
         const formData = extend({},this.clone(data),{to, doc});
         delete formData.app;
         this.data2qs(formData,queryString,undefined);
-        return this.httpService.post(this.sendmailOptions.app,queryString.join('&')).toPromise();
+        try {
+            return await this.httpService.post(this.sendmailOptions.app,queryString.join('&')).toPromise();
+        } catch (e) {
+            console.log ('BYŁ BŁĄD, TRZEBA GDZIEŚ ZAPISAĆ, TODO!');
+        }
+
     }
 }
 

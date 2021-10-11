@@ -1,21 +1,20 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, Optional } from '@nestjs/common';
 import { Model } from 'src/common/base-model';
-import {CloudDatastoreService} from "../common/cloud-datastore.service";
 import {SendmailService, VERIFICATION_DOCUMENT} from "../common/sendmail.service";
 import {UserModel} from "./user.model";
+import {UserTokenModel} from "./user-token.model";
 
 @Injectable()
 export class UserService {
+    private user: UserModel;
+    private userToken: UserTokenModel;
     constructor (
-        private readonly dbService: CloudDatastoreService,
         private sendMail: SendmailService,
-        @Inject('USER_MODEL') private UserModel: Model<UserModel>
+        @Inject('USER_MODEL') private UserModel: Model<UserModel>,
+        @Inject('USER_TOKEN_MODEL') private UserTokenModel: Model<UserTokenModel>
         ) {
-            const newUser = new UserModel();
-
-            const result = newUser.find().then((res)=>{
-                console.log('afterFind',res);
-            });
+            this.user=new UserModel();
+            this.userToken=new UserTokenModel();
         }
 
 
@@ -24,18 +23,24 @@ export class UserService {
         email=email.toLowerCase().trim();
 
         const filter = {where:{email}};
-        let user=await this.dbService.findOne('User',filter);
+        let user=await this.user.findOne(filter);
         if (!user) {
-            user=await this.dbService.create('User',filter.where);
+            user=await this.user.create(filter.where);
         }
-        
-        user.pin=Date.now().toString().substr(-4);
-        await this.dbService.update('User',{id:user.id},user);
 
-        this.sendMail.send(email,VERIFICATION_DOCUMENT,{pin:user.pin});
+        const userToken=await this.userToken.create({
+            userId: user.id,
+            pin: Date.now().toString().substr(-6)
+        });
+
+
+        userToken.user = user;
+        this.sendMail.send(email,VERIFICATION_DOCUMENT,userToken);
+
 
         return {
             email,
+            user: user.id,
             result:'check your mailbox'
         };
     }
